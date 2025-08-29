@@ -2,6 +2,8 @@ import os
 
 from git.logger import Logger
 
+# -------- Helper Functions --------
+
 def get_current_folder_path():
     """Returns the current working directory."""
     return os.getcwd()
@@ -9,6 +11,14 @@ def get_current_folder_path():
 def is_git_repository(folder_path):
     """Checks if the given folder is a Git repository."""
     return os.path.isdir(os.path.join(folder_path, '.git'))
+
+def create_objects_folder(git_folder_path):
+    """Creates the objects folder inside the .git directory."""
+    objects_path = os.path.join(git_folder_path, 'objects')
+    os.makedirs(objects_path, exist_ok=True)
+    return objects_path
+
+# -------- Main Function --------
 
 def git_init(folder_path:str = get_current_folder_path(), quiet:bool = False):
     """
@@ -36,6 +46,8 @@ def git_init(folder_path:str = get_current_folder_path(), quiet:bool = False):
         new_folder_path = os.path.join(folder_path, '.git')
         os.makedirs(new_folder_path)
         logger.print(f"Initialized empty Git repository in '{new_folder_path}'")
+    
+    create_objects_folder(os.path.join(folder_path, '.git'))
 
 def main():
     git_init()
