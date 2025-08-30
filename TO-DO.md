@@ -1,4 +1,4 @@
-- [ ] Blobs
+- [X] Blobs
 - [ ] Commits
 - [ ] Trees
 - [ ] References

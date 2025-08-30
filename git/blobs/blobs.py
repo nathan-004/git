@@ -2,10 +2,24 @@ import os
 from hashlib import sha1
 import zlib
 
+def is_child(path, repo_path):
+    """Check if 'path' is a child of 'repo_path'."""
+    abs_path = os.path.abspath(path)
+    abs_repo_path = os.path.abspath(repo_path)
+
+    return abs_path.startswith(abs_repo_path)
+
 class Blob:
-    def __init__(self, file_path: str, repo_path: str):
+    def __init__(self, file_path: str, repo_path:str):
         self.file_path = file_path
-        
+
+        if not is_child(file_path, repo_path):
+            self.init_file(repo_path)
+        else: 
+            self.intit_blob(repo_path)
+    
+    def init_file(self, repo_path: str):
+        """Initialize a blob from a file path"""
         self.content = self._read_file()
         self.size = len(self.content)
         
@@ -13,6 +27,19 @@ class Blob:
         print(f"Blob SHA-1: {self.sha1}", f"Encoded Content: {self.encoded_content}", sep="\n")
 
         self._save_blob(repo_path)
+
+    def intit_blob(self, repo_path: str):
+        """Initialize a blob from an existing blob file path"""
+        self.content = self._read_file()
+        self.content = zlib.decompress(self.content)
+        self.content = self.content.decode()
+        try:
+            self.content = self.content.split('\0', 1)[1]
+        except Exception as e:
+            print("Error decoding blob content:", e)
+            return
+        
+        print(self.content)
 
     def _read_file(self) -> bytes:
         with open(self.file_path, 'rb') as f:
@@ -43,4 +70,4 @@ class Blob:
         with open(blob_file_path, 'wb') as f:
             f.write(self.encoded_content)
 
-blob = Blob('example.txt', '.git')
+blob = Blob('.git/objects/fc/e4387400f4bee19265a966929a2e68a390da31', '.git')
