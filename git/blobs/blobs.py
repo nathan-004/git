@@ -69,5 +69,3 @@ class Blob:
         blob_file_path = os.path.join(blob_path, file_name)
         with open(blob_file_path, 'wb') as f:
             f.write(self.encoded_content)
-
-blob = Blob('.git/objects/fc/e4387400f4bee19265a966929a2e68a390da31', '.git')

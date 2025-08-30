@@ -50,4 +50,4 @@ def git_init(folder_path:str = get_current_folder_path(), quiet:bool = False):
     create_objects_folder(os.path.join(folder_path, '.git'))
 
 def main():
-    git_init()
+    git_init("example")
