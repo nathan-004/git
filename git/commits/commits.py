@@ -47,14 +47,22 @@ class Commit:
         dir_name = self.sha1[:2]
         file_name = self.sha1[2:]
         commit_path = os.path.join(objects_dir, dir_name)
-        commit_file_path = os.path.join(commit_path, file_name)
+        self.commit_file_path = os.path.join(commit_path, file_name)
         if not os.path.exists(commit_path):
             os.makedirs(commit_path)
             
-        with open(commit_file_path, 'wb') as f:
+        with open(self.commit_file_path, 'wb') as f:
             f.write(self.encoded_content)
-        print(zlib.decompress(self.encoded_content))
         print(f"Commit SHA-1: {self.sha1}")
+        
+    def _get_content_file(self, file_path):
+        """
+        Returns the decoded content of the file
+        :param str file_path: Path of the encoded Commit file 
+        """
+        with open(file_path, "rb") as f:
+            return zlib.decompress(f.read())
 
 def main():
     commit = Commit("example", "example/.git")
+    print(commit._get_content_file(file_path=commit.commit_file_path))

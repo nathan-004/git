@@ -24,7 +24,7 @@ class Blob:
         self.size = len(self.content)
         
         self.sha1, self.encoded_content = self._encode_blob()
-        print(f"Blob SHA-1: {self.sha1}", f"Encoded Content: {self.encoded_content}", sep="\n")
+        print(f"Blob SHA-1: {self.sha1} -- File : {self.file_path}")
 
         self._save_blob(repo_path)
 
@@ -38,8 +38,6 @@ class Blob:
         except Exception as e:
             print("Error decoding blob content:", e)
             return
-        
-        print(self.content)
 
     def _read_file(self) -> bytes:
         with open(self.file_path, 'rb') as f:

@@ -30,7 +30,6 @@ class Tree:
         entries = self.get_folder_content()
         result = list_to_bytes(entries)
         header = f'tree {len(result)}\0'.encode()
-        print(header, result)
         self.sha1 = sha1(header + result).hexdigest()
         self.encoded_content = zlib.compress(header + result)
         self._save_tree()
@@ -74,9 +73,7 @@ class Tree:
         
         with open(tree_file_path, 'wb') as f:
             f.write(self.encoded_content)
-        print(zlib.decompress(self.encoded_content))
         print(f"Tree SHA-1: {self.sha1}")
 
 def main():
-    print("test")
     tree = Tree('example', 'example/.git')
