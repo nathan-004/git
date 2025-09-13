@@ -1,5 +1,4 @@
 - [X] Blobs
-- [ ] Commits
+- [X] Commits
 - [X] Trees
-- [ ] References
-- [ ] Operations
+- [ ] Branches
