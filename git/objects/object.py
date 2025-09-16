@@ -12,7 +12,23 @@ def is_child(path, repo_path):
     return abs_path.startswith(abs_repo_path)
 
 def get_object_path(sha1, repo_path):
-    """Retourne un """
+    """Retourne le chemin du fichier à enregistrer"""
+    objects_dir = os.path.join(repo_path, 'objects')
+    if not os.path.exists(objects_dir):
+        os.makedirs(objects_dir)
+
+    dir_name = sha1[:2]
+    file_name = sha1[2:]
+    dir_path = os.join(objects_dir, dir_name)
+
+    if not os.path.exists(dir_path):
+        os.makedirs(dir_path)
+    
+    object_file_path = os.path.join(dir_path, file_name)
+    with open(object_file_path, "wb") as f:
+        f.write()
+    
+    return object_file_path
 
 class Object:
     def __init__(self, file_path:str, repo_path:str):
@@ -35,6 +51,10 @@ class Object:
 
         self._save_file()
 
+    def init_object(self):
+        """Lis un objet git et stocke ses informations"""
+        pass
+
     def get_content(self) -> tuple[str, str]:
         """
         Retourne le header et le contenu de l'objet à stocker
@@ -56,4 +76,4 @@ class Object:
             return f.read()
     
     def _save_file(self):
-        pass
+        self.git_object_path = get_object_path(self.sha1, self.repo_path)
