@@ -53,7 +53,16 @@ class Object:
 
     def init_object(self):
         """Lis un objet git et stocke ses informations"""
-        pass
+        # Trouver le chemin du fichier
+        self.encoded_content = self._read_file()
+        self.content = zlib.decompress(self.encoded_content).decode()
+        try:
+            els = self.content.split("\0", 1)
+            self.content = els[1]
+            self.header = els[0]
+        except Exception as e:
+            print("Error decoding blob content:", e)
+            return
 
     def get_content(self) -> tuple[str, str]:
         """
@@ -77,3 +86,6 @@ class Object:
     
     def _save_file(self):
         self.git_object_path = get_object_path(self.sha1, self.repo_path)
+
+        with open(self.git_object_path, "wb") as f:
+            f.write(self.encoded_content)
