@@ -8,7 +8,6 @@ def is_child(path, repo_path):
     """Check if 'path' is a child of 'repo_path'."""
     abs_path = os.path.abspath(path)
     abs_repo_path = os.path.abspath(repo_path)
-
     return abs_path.startswith(abs_repo_path)
 
 def get_object_path(sha1, repo_path):
@@ -19,14 +18,12 @@ def get_object_path(sha1, repo_path):
 
     dir_name = sha1[:2]
     file_name = sha1[2:]
-    dir_path = os.join(objects_dir, dir_name)
+    dir_path = os.path.join(objects_dir, dir_name)
 
     if not os.path.exists(dir_path):
         os.makedirs(dir_path)
     
     object_file_path = os.path.join(dir_path, file_name)
-    with open(object_file_path, "wb") as f:
-        f.write()
     
     return object_file_path
 
@@ -36,9 +33,9 @@ class Object:
         self.repo_path = repo_path
 
         if is_child(file_path, repo_path):
-            self.init_file()
-        else:
             self.init_object()
+        else:
+            self.init_file()
     
     def init_file(self):
         """Crée un objet dans `.\git`"""
