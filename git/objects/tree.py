@@ -5,7 +5,8 @@ import binascii
 
 from typing import NamedTuple
 
-from git.blobs.blobs import Blob
+from git.objects.blobs import Blob
+from git.objects.object import Object
 
 class Entry(NamedTuple):
     mode:str
@@ -21,32 +22,37 @@ def list_to_bytes(entries:list[Entry]) -> bytes:
         result += entry_line
     return result
 
-class Tree:
+class Tree(Object):
     """Represents a Git tree object."""
-    def __init__(self, path:str, repo_path:str):
-        self.path = path
-        self.repo_path = repo_path
 
+    def get_content(self) -> tuple[str, str]:
+        """
+        Retourne le header et le contenu de l'objet à stocker
+        
+        Returns
+        -------
+        header:str
+            Contient des informations annexes comme le nom de l'objet et sa taille
+        content:str
+            Le contenu de l'objet à stocker
+        """
         entries = self.get_folder_content()
         result = list_to_bytes(entries)
-        header = f'tree {len(result)}\0'.encode()
-        self.sha1 = sha1(header + result).hexdigest()
-        self.encoded_content = zlib.compress(header + result)
-        self._save_tree()
+        return (f'tree {len(result)}\0'.encode(), result)
 
     def get_folder_content(self):
         """
         Creates a tree object from the directory structure.
         This method reads the contents of the directory at self.path, and creates files in the .git/objects directory.
         """
-        if not os.path.isdir(self.path):
-            raise ValueError(f"The path {self.path} is not a valid directory.")
+        if not os.path.isdir(self.file_path):
+            raise ValueError(f"The path {self.file_path} is not a valid directory.")
 
         entries = []
-        for entry in os.listdir(self.path):
+        for entry in os.listdir(self.file_path):
             if entry == '.git':
                 continue
-            entry_path = os.path.join(self.path, entry)
+            entry_path = os.path.join(self.file_path, entry)
             if os.path.isfile(entry_path):
                 blob = Blob(entry_path, self.repo_path)
                 entries.append(Entry(mode='100644', type='blob', sha1=blob.sha1, name=entry))
@@ -59,20 +65,8 @@ class Tree:
         
         return entries
     
-    def _save_tree(self):
-        objects_dir = os.path.join(self.repo_path, 'objects')
-        if not os.path.exists(objects_dir):
-            os.makedirs(objects_dir)
-        
-        dir_name = self.sha1[:2]
-        file_name = self.sha1[2:]
-        tree_path = os.path.join(objects_dir, dir_name)
-        tree_file_path = os.path.join(tree_path, file_name)
-        if not os.path.exists(tree_path):
-            os.makedirs(tree_path)
-        
-        with open(tree_file_path, 'wb') as f:
-            f.write(self.encoded_content)
+    def _save_file(self):
+        super()._save_file()
         print(f"Tree SHA-1: {self.sha1}")
 
 def main():

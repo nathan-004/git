@@ -3,7 +3,7 @@ from hashlib import sha1
 import time
 import os
 
-from git.trees.tree import Tree
+from git.objects.tree import Tree
 # from git.utils import get_last_commit
 
 author = "Test Name"

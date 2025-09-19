@@ -58,7 +58,7 @@ class Object:
             self.content = els[1]
             self.header = els[0]
         except Exception as e:
-            print("Error decoding blob content:", e)
+            print(f"Error decoding {type(self)} content:", e)
             return
 
     def get_content(self) -> tuple[str, str]:
