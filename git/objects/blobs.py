@@ -21,3 +21,7 @@ class Blob(Object):
         header = f"blob {len(file_content)}"
         
         return (header,file_content)
+
+    def _save_file(self):
+        super()._save_file()
+        print(f"Blob SHA-1: {self.sha1} - Filename: {self.file_path}")

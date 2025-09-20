@@ -67,7 +67,7 @@ class Tree(Object):
     
     def _save_file(self):
         super()._save_file()
-        print(f"Tree SHA-1: {self.sha1}")
+        print(f"Tree SHA-1: {self.sha1} - Path: {self.file_path}")
 
 def main():
     tree = Tree('example', 'example/.git')
