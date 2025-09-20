@@ -52,3 +52,4 @@ class Commit(Object):
 
 def main():
     commit = Commit("example", "example/.git")
+    print(zlib.decompress(commit.encoded_content))
