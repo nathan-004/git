@@ -4,24 +4,15 @@ import time
 import os
 
 from git.objects.tree import Tree
+from git.objects.object import Object
 # from git.utils import get_last_commit
 
 author = "Test Name"
 email = "Test@example.fr"
 message = "Test Message"
 
-class Commit:
+class Commit(Object):
     """Contains the current tree, the parent tree, the author, the date and the message"""
-    
-    def __init__(self, file_path, repo_path):
-        self.file_path = file_path
-        self.repo_path = repo_path
-        content = self._get_content()
-        header = f"commit {len(content)}\0".encode()
-        content = header + content.encode()
-        self.sha1 = sha1(content).hexdigest()
-        self.encoded_content = zlib.compress(content)
-        self._save_tree()
 
     def get_content(self):
         """
@@ -61,4 +52,3 @@ class Commit:
 
 def main():
     commit = Commit("example", "example/.git")
-    print(commit._get_content_file(file_path=commit.commit_file_path))
