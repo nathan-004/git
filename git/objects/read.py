@@ -16,7 +16,7 @@ def read(sha1:str, repo_path):
     path = os.path.join(repo_path, ".git","objects", sha1[:2], sha1[2:])
 
     if not os.path.exists(path):
-        raise FileExistsError
+        raise FileNotFoundError
     
     with open(path, "rb") as f:
         content = f.read()

@@ -18,6 +18,12 @@ def create_objects_folder(git_folder_path):
     os.makedirs(objects_path, exist_ok=True)
     return objects_path
 
+def create_branches_folder(git_folder_path):
+    refs_path = os.path.join(git_folder_path, "refs")
+    os.makedirs(refs_path, exist_ok=True)
+    head_refs = os.path.join(refs_path, "heads")
+    os.makedirs(head_refs, exist_ok=True)
+
 # -------- Main Function --------
 
 def git_init(folder_path:str = get_current_folder_path(), quiet:bool = False):
@@ -48,6 +54,7 @@ def git_init(folder_path:str = get_current_folder_path(), quiet:bool = False):
         logger.print(f"Initialized empty Git repository in '{new_folder_path}'")
     
     create_objects_folder(os.path.join(folder_path, '.git'))
+    create_branches_folder(os.path.join(folder_path, '.git'))
 
 def main():
     git_init("example")
