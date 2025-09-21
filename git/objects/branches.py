@@ -16,11 +16,15 @@ class Branche:
             commit_sha1 = commit.sha1
         self.create_file(commit_sha1, repo_path)
 
-    def create_file(self, commit_sha1:str, repo_path:str):
-        """Crée un fichier dans `.git/refs/heads`"""
-        path = os.path.join(".git", "refs", "heads", self.branch_name)
+    def create_file(self, commit_sha1: str, repo_path: str):
+        """Crée un fichier dans `.git/refs/heads` pointant vers un commit"""
+        path = os.path.join(repo_path, "refs", "heads", self.branch_name)
+
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+
         with open(path, "w") as f:
-            f.write(commit_sha1)
+            f.write(commit_sha1.strip() + "\n")
+
 
 def main():
-    Branche("example", folder_path="example")
+    Branche("example/.git", folder_path="example")
