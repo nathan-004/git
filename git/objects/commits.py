@@ -5,6 +5,7 @@ import os
 
 from git.objects.tree import Tree
 from git.objects.object import Object
+from git.objects.read import get_latest_commit
 # from git.utils import get_last_commit
 
 author = "Test Name"
@@ -13,7 +14,6 @@ message = "Test Message"
 
 class Commit(Object):
     """Contains the current tree, the parent tree, the author, the date and the message"""
-
     def get_content(self):
         """
         Retourne le header et le contenu de l'objet à stocker
@@ -43,6 +43,10 @@ class Commit(Object):
             "",
             message
         ]
+
+        parent = get_latest_commit(self.repo_path)
+        if parent is not None:
+            lines.insert(1, f"parent {parent.strip()}")
 
         return "\n".join(lines)
 

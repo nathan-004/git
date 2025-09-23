@@ -8,3 +8,4 @@ if __name__ == "__main__":
     init_git()
     # tree_main()
     branch_main()
+    print(read("bbd158bcdbd5ba611cdd48b898f77a652cad603d", "example"))

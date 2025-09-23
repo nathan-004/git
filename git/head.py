@@ -18,5 +18,5 @@ def get_latest_branch_path(repo_path:str) -> str:
         return content[5:]
     
 def get_latest_branch_content(repo_path:str) -> str:
-    with open(get_latest_branch_path(repo_path)) as f:
+    with open(os.path.join(repo_path, get_latest_branch_path(repo_path))) as f:
         return f.read()

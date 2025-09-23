@@ -17,7 +17,7 @@ def read(sha1:str, repo_path):
     -------
     The content of the file, raises an FileExistsError if the sha1 is not valid
     """
-    path = os.path.join(repo_path, ".git","objects", sha1[:2], sha1[2:])
+    path = os.path.join(repo_path, ".git", "objects", sha1[:2], sha1[2:])
 
     if not os.path.exists(path):
         raise FileNotFoundError
@@ -43,4 +43,8 @@ def read_object(sha1:str, repo_path:str) -> Object:
     print(header, file_content)
 
 def get_latest_commit(repo_path:str) -> str:
-    return get_latest_branch_content(repo_path)
+    """Return le sha1 du dernier commit si head existe sinon None"""
+    try:
+        return get_latest_branch_content(repo_path)
+    except FileNotFoundError:
+        return None
